@@ -3,6 +3,7 @@ import axios from "axios";
 
 function FileUp() {
   const [file, setFile] = useState(null);
+  const [progress, setprogress] = useState(0);
   const chunk_size = 1024 * 1024;
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -17,12 +18,14 @@ function FileUp() {
 
     try {
       await axios.post(
-        `http://localhost:5000/upload?chunkIndex=${chunkIndex}`,fd,{
+        `http://192.168.58.41:5000/upload?chunkIndex=${chunkIndex}`,fd,{
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
       
       console.log(`Chunk ${chunkIndex + 1}/${totalChunks} uploaded successfully.`);
+      const percent = ((chunkIndex+1)/totalChunks)*100;
+      setprogress(percent);
     } catch (error) {
       console.error(`Error uploading chunk ${chunkIndex}:`, error);
       throw error;
@@ -46,7 +49,7 @@ function FileUp() {
         await uploadChunk(chunk, i, totalChunks);
       }
 
-      await axios.post("http://localhost:5000/complete-upload", {
+      await axios.post("http://192.168.58.41:5000/complete-upload", {
         fileName: file.name,
       });
 
@@ -63,6 +66,7 @@ function FileUp() {
         <input type="file" onChange={handleFileChange} required />
         <button type="submit">Upload</button>
       </form>
+      <p>progress is {progress.toFixed(1)}%</p>
     </div>
   );
 }
