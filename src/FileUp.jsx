@@ -1,5 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
+import SignIn from './auth/signin.jsx'
+import SignUp from './auth/signup.jsx'
 
 function FileUp() {
   const [file, setFile] = useState(null);
@@ -48,10 +50,11 @@ function FileUp() {
         const chunk = file.slice(start, end);
         await uploadChunk(chunk, i, totalChunks);
       }
-
       await axios.post("http://192.168.58.41:5000/complete-upload", {
         fileName: file.name,
+        userid:localStorage.getItem("userId")
       });
+      
 
       console.log("File uploaded and assembled successfully!");
     } catch (error) {
@@ -62,6 +65,11 @@ function FileUp() {
   return (
     <div>
       <h1>Chunked File Upload</h1>
+      <div>
+      <h1>Authentication App</h1>
+      <SignUp />
+      <SignIn />
+      </div>
       <form onSubmit={handleSubmit}>
         <input type="file" onChange={handleFileChange} required />
         <button type="submit">Upload</button>
