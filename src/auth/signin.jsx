@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const SignIn = () => {
@@ -6,12 +7,13 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [userId, setUserId] = useState(null);
+  const navigate = useNavigate();
 
   const handleSignIn = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://192.168.58.41:5000/login", {
+      const response = await axios.post("http://192.168.206.41:5000/login", {
         username,
         password,
       });
@@ -21,6 +23,7 @@ const SignIn = () => {
       setUserId(id);
       console.log(localStorage.getItem("userId"));
       setMessage("Login successful!");
+      navigate('/show');
     } catch (error) {
       setMessage(
         error.response?.data?.message || "An error occurred. Please try again."

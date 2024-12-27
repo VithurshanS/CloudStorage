@@ -1,5 +1,5 @@
-// SignUp.js
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const SignUp = () => {
@@ -11,7 +11,7 @@ const SignUp = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://192.168.58.41:5000/signup", {
+      const response = await axios.post("http://192.168.206.41:5000/signup", {
         username:username,
         password:password,
       });
