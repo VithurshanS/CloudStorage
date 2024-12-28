@@ -109,15 +109,16 @@ app.post("/signup", async (req, res) => {
 
     const userId = result[0].ID;
     const userFolder = path.join(__dirname, "uploads", String(userId));
-    fs.mkdir(userFolder, { recursive: true }, (err) => {
+    /*fs.mkdir(userFolder, { recursive: true }, (err) => {
       if (err) {
         console.error("Error creating folder:", err);
         return res.status(500).json({ message: "Failed to create user folder." });
       }
 
       console.log(`Folder created: ${userFolder}`);
-      res.status(201).json({ message: "User registered successfully.", userId });
-    });
+
+    });*/
+    res.status(201).json({ message: "User registered successfully.", userId });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Internal server error." });
@@ -161,6 +162,7 @@ app.post('/download', (req, res) => {
 
     const fileStream = fs.createReadStream(filePath);
     fileStream.pipe(res);
+
 
     fileStream.on('error', (err) => {
       console.error('Error reading the file:', err);
@@ -234,7 +236,7 @@ app.post('/complete-upload', express.json(),async (req, res) => {
       );
       const chunkDir = path.join(__dirname, `./chunks/${uuid}`);
       if (fs.existsSync(chunkDir)) {
-        fs.rmSync(chunkDir, { recursive: true, force: true }); // Delete the uuid folder and its contents
+        fs.rmSync(chunkDir, { recursive: true, force: true });
         console.log(`Deleted folder: ${chunkDir}`);
       }
 
